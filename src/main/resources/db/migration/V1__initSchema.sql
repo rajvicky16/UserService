@@ -14,7 +14,7 @@ CREATE TABLE tokens
     created_at  datetime NULL,
     updated_at  datetime NULL,
     is_deleted  BIT(1) NULL,
-    token       VARCHAR(255) NULL,
+    token_val   VARCHAR(255) NULL,
     user_id     BIGINT NULL,
     expiry_date datetime NULL,
     CONSTRAINT pk_tokens PRIMARY KEY (id)

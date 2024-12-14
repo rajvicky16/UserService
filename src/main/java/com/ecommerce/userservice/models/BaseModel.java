@@ -21,5 +21,5 @@ public class BaseModel {
     private Date createdAt;
     @LastModifiedDate
     private Date updatedAt;
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 }
