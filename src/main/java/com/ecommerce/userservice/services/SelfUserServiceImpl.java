@@ -45,7 +45,7 @@ public class SelfUserServiceImpl implements UserService{
     public Token loginUser(User user) throws UserNotFoundException, InvalidPasswordException {
         Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
 
-        if(optionalUser.isEmpty()){
+        if(optionalUser.isEmpty() || optionalUser.get().getIsDeleted()){
             throw new UserNotFoundException(user.getEmail(), "User not found with this email, please sign up or use another email");
         }
 
@@ -66,12 +66,24 @@ public class SelfUserServiceImpl implements UserService{
     }
 
     @Override
-    public boolean validateToken(String token) {
-        return false;
+    public boolean validateToken(String token, Long userId) {
+        Optional<Token> tokenOptional = tokenRepository.findByTokenValAndUserId(token, userId);
+
+        if(tokenOptional.isEmpty() || tokenOptional.get().getIsDeleted() || tokenOptional.get().getExpiryDate().before(new Date())){
+            return false;
+        }
+
+        return true;
     }
 
     @Override
-    public void logoutUser(String token) {
+    public void logoutUser(String token, Long userId) {
+        boolean isTokenValid = validateToken(token, userId);
 
+        if(isTokenValid){
+            Optional<Token> tokenOptional = tokenRepository.findByTokenValAndUserId(token, userId);
+            tokenOptional.get().setIsDeleted(true);
+            tokenRepository.save(tokenOptional.get());
+        }
     }
 }

@@ -1,10 +1,8 @@
 package com.ecommerce.userservice.controllers;
 
+import com.ecommerce.userservice.dtos.tokenDtos.ValidateTokenRequestDto;
 import com.ecommerce.userservice.dtos.tokenDtos.ValidateTokenResponseDto;
-import com.ecommerce.userservice.dtos.userDtos.LoginRequestDto;
-import com.ecommerce.userservice.dtos.userDtos.LoginResponseDto;
-import com.ecommerce.userservice.dtos.userDtos.SignUpRequestDto;
-import com.ecommerce.userservice.dtos.userDtos.SignUpResponseDto;
+import com.ecommerce.userservice.dtos.userDtos.*;
 import com.ecommerce.userservice.exceptions.InvalidPasswordException;
 import com.ecommerce.userservice.exceptions.UserAlreadyFound;
 import com.ecommerce.userservice.exceptions.UserNotFoundException;
@@ -45,14 +43,28 @@ public class UserController {
     }
 
     @GetMapping("/validateToken/{token}")
-    public ResponseEntity<ValidateTokenResponseDto> validateToken(){
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<ValidateTokenResponseDto> validateToken(@PathVariable(name = "token") String token, @RequestBody ValidateTokenRequestDto validateTokenRequestDto){
+        boolean isValid = userService.validateToken(token, validateTokenRequestDto.getUserId());
+        ValidateTokenResponseDto validateTokenResponseDto = new ValidateTokenResponseDto();
+        if(isValid){
+            validateTokenResponseDto.setIsValid(true);
+            validateTokenResponseDto.setMessage("Token is valid");
+            return new ResponseEntity<>(
+                    validateTokenResponseDto,
+                    HttpStatus.OK
+            );
+        }
+        validateTokenResponseDto.setIsValid(false);
+        validateTokenResponseDto.setMessage("Token is invalid");
+        return new ResponseEntity<>(
+                validateTokenResponseDto,
+                HttpStatus.UNAUTHORIZED
+        );
     }
 
     @GetMapping("/logout")
-    public ResponseEntity<Void> logoutUser(){
-
+    public ResponseEntity<Void> logoutUser(@RequestBody LogoutRequestDto logoutRequestDto){
+        userService.logoutUser(logoutRequestDto.getToken(), logoutRequestDto.getUserId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

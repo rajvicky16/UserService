@@ -13,7 +13,7 @@ public interface UserService {
 
     Token loginUser(User user) throws UserNotFoundException, InvalidPasswordException;
 
-    boolean validateToken(String token);
+    boolean validateToken(String token, Long userId);
 
-    void logoutUser(String token);
+    void logoutUser(String token, Long userId);
 }
