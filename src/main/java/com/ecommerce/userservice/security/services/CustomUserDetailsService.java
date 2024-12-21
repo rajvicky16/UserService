@@ -1,5 +1,6 @@
 package com.ecommerce.userservice.security.services;
 
+import com.ecommerce.userservice.models.Role;
 import com.ecommerce.userservice.models.User;
 import com.ecommerce.userservice.repositories.UserRepository;
 import com.ecommerce.userservice.security.models.CustomUserDetails;
@@ -26,6 +27,12 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found for email: " + email);
         }
 
-        return new CustomUserDetails(optionalUser.get());
+        User currUser = optionalUser.get();
+
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(currUser.getName())
+                .password(currUser.getPassword())
+                .roles(currUser.getRoles().stream().map(Role::getRoleValue).toArray(String[]::new))
+                .build();
     }
 }

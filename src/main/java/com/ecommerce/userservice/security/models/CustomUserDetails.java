@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class CustomUserDetails implements UserDetails,Serializable {
+public class CustomUserDetails implements UserDetails, Serializable {
     private Long userId;
     private String username;
     private String password;

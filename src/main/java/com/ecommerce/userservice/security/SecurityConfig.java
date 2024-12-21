@@ -44,12 +44,12 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
 	@Bean
 	@Order(1)
 	public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
@@ -80,9 +80,11 @@ public class SecurityConfig {
 	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
 			throws Exception {
 		http
-				.authorizeHttpRequests((authorize) ->
-								authorize.anyRequest().authenticated()
+				.authorizeHttpRequests((authorize) -> authorize
+								.anyRequest().authenticated()
 				)
+				.cors().disable()
+				.csrf().disable()
 				// Form login handles the redirect to the login page from the
 				// authorization server filter chain
 				.formLogin(Customizer.withDefaults());
@@ -96,6 +98,7 @@ public class SecurityConfig {
 				.username("user")
 				.password("$2a$12$IlRLydR85rfyus72niCE/O4ROhB/QYedJ3TeIG7qO00WZFBkqEn0m")
 				.roles("USER")
+				.roles("ADMIN")
 				.build();
 
 		return new InMemoryUserDetailsManager(userDetails);
@@ -153,5 +156,4 @@ public class SecurityConfig {
 	public AuthorizationServerSettings authorizationServerSettings() {
 		return AuthorizationServerSettings.builder().build();
 	}
-
 }
