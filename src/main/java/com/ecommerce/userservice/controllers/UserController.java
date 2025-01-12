@@ -1,6 +1,5 @@
 package com.ecommerce.userservice.controllers;
 
-import com.ecommerce.userservice.dtos.tokenDtos.ValidateTokenRequestDto;
 import com.ecommerce.userservice.dtos.tokenDtos.ValidateTokenResponseDto;
 import com.ecommerce.userservice.dtos.userDtos.*;
 import com.ecommerce.userservice.exceptions.InvalidPasswordException;
@@ -43,8 +42,8 @@ public class UserController {
     }
 
     @GetMapping("/validateToken/{token}")
-    public ResponseEntity<ValidateTokenResponseDto> validateToken(@PathVariable(name = "token") String token, @RequestBody ValidateTokenRequestDto validateTokenRequestDto){
-        boolean isValid = userService.validateToken(token, validateTokenRequestDto.getUserId());
+    public ResponseEntity<ValidateTokenResponseDto> validateToken(@PathVariable(name = "token") String token, @RequestParam Long userId){
+        boolean isValid = userService.validateToken(token, userId);
         ValidateTokenResponseDto validateTokenResponseDto = new ValidateTokenResponseDto();
         if(isValid){
             validateTokenResponseDto.setIsValid(true);
@@ -62,7 +61,7 @@ public class UserController {
         );
     }
 
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public ResponseEntity<Void> logoutUser(@RequestBody LogoutRequestDto logoutRequestDto){
         userService.logoutUser(logoutRequestDto.getToken(), logoutRequestDto.getUserId());
         return new ResponseEntity<>(HttpStatus.OK);
