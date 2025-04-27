@@ -19,7 +19,7 @@ This project is a **User Service** for an e-commerce platform. It is built using
 
 ### Clone the Repository
 ```bash
-git clone https://github.com/your-repository-url.git
+git clone https://github.com/rajvicky16/userservice.git
 cd your-project-directory
 ```
 
@@ -32,8 +32,8 @@ mvn clean install
 ### Configuration
 Update the application.properties or application.yml file in the src/main/resources directory to configure database connection details and other application settings.  
 Example:
-```bash
-spring.datasource.url=jdbc:mysql://localhost:3306/your_database
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/your_database_url
 spring.datasource.username=your_username
 spring.datasource.password=your_password
 spring.jpa.hibernate.ddl-auto=update
