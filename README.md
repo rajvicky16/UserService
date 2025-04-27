@@ -19,7 +19,7 @@ This project is a **User Service** for an e-commerce platform. It is built using
 
 ### Clone the Repository
 ```bash
-git clone https://github.com/rajvicky16/userservice.git
+git clone https://github.com/rajvicky16/UserService.git
 cd your-project-directory
 ```
 
